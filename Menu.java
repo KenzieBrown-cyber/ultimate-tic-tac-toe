@@ -1,11 +1,20 @@
 import java.util.Scanner;
 
 public class Menu {
-    public static void main(String[] args) {
-        MainMenu();
+
+    private int beginnerWins;
+    private int advancedWins;
+    private int ties;
+    private int totalGames;
+    
+    public Menu() {
+        this.beginnerWins = 0;
+        this.advancedWins = 0;
+        this.ties = 0;
+        this.totalGames = 0;
     }
 
-    public static void MainMenu() {
+    public void MainMenu() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("\nUltimate Tic-Tac-Toe!");
         System.out.println("1. New Beginner Game");
@@ -14,9 +23,7 @@ public class Menu {
         System.out.println("4. Advanced Game Instructions");
         System.out.println("5. Scoreboard");
         System.out.println("6. Quit");
-        System.out.print("\nPlease select an option: ");
-        
-        int choice = scanner.nextInt();
+        int choice = readIntInRange(scanner, 1, 6, "\nPlease select an option 1-6: ");
         
         switch (choice) {
             case 1:
@@ -42,26 +49,50 @@ public class Menu {
                 System.out.println("1. The game is played on a 3x3 external grid with 3x3 internal grids inside of each spot on the external grid.");
                 System.out.println("2. Players take turns placing their marks (X or O) on a internal grid of choice within the external grid.");
                 System.out.println("3. Wherever player A places their mark, player B must play in the internal game in the external grid corresponding to player A's internal mark.");
-                System.out.println("For Example: Player A places an X in the center of the top-right internal game. Player B must now place their O somewhere on the internal center game.")
+                System.out.println("For Example: Player A places an X in the center of the top-right internal game. Player B must now place their O somewhere on the internal center game.");
                 System.out.println("4. The player who wins an internal grid game (by getting 3 in a row horizontally, vertically, or diagonally) gets to place their mark on the corresponding spot of the external grid.");
                 System.out.println("5. The first player to get 3 of their marks on the external grid game in a row (horizontally, vertically, or diagonally) wins.");
                 break;
             case 5:
                 // Display scoreboard
-                System.out.println("\nScoreboard:");
-                
+                displayScoreboard();
                 break;
             case 6:
                 // Quit the program
                 System.out.println("\nThanks for playing. Goodbye!");
                 break;
-                
-            default:
-                System.out.println("\nInvalid option. Please try again.");
-                break;
+        
         }
         
         scanner.close();
-    
-}
-}
+    }
+
+    public void displayScoreboard() {
+        System.out.println("Scoreboard:");
+        System.out.println("Beginner Wins: " + beginnerWins);
+        System.out.println("Advanced Wins: " + advancedWins);
+        System.out.println("Ties: " + ties);
+        System.out.println("Total Games: " + totalGames);
+    }
+
+    public static int readIntInRange(Scanner scanner, int min, int max, String prompt) {
+        while (true) {
+            System.out.print(prompt);
+            if (!scanner.hasNextInt()) {
+                scanner.next();
+                System.out.println("Invalid input. Please enter a number in between " + min + " and " + max + ".");
+                continue;
+            }
+
+            int value = scanner.nextInt();
+            scanner.nextLine();
+
+            if (value < min || value > max) {
+                System.out.println("Please enter a number between " + min + " and " + max + ".");
+                continue;
+            }
+
+            return value;
+        }
+    }
+    }
