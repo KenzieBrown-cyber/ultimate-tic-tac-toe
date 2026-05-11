@@ -67,7 +67,6 @@ public class Menu {
                 pressEnterToContinue(scanner);
                 break;
             case 3:
-                System.out.println("\nStarting a new advanced game...");
                 advanced.newAdvancedGame();
                 totalGames++;
                 advancedGames++;

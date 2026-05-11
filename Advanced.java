@@ -1,0 +1,225 @@
+import java.util.Scanner;
+
+public class Advanced {
+    
+    
+    public char newAdvancedGame() {
+        Scanner scanner = new Scanner(System.in);
+        char mark = 'X';
+        boolean gameOver = false;
+        boolean firstPromt = true;
+
+        char[][][] board = new char[9][3][3];
+        char[] boardOwner = new char[9];
+
+        // Initialize the board and owner states with dashes
+        for (int i = 0; i < 9; i++) {
+            boardOwner[i] = '-';
+            for (int j = 0; j < 3; j++) {
+                for (int k = 0; k < 3; k++) {
+                    board[i][j][k] = '-';
+                }
+            }
+        }
+
+        System.out.println("\nStarting a new Advanced game...");
+
+        while (!gameOver) {
+            System.out.println("\nUltimate Tic-Tac-Toe Board:");
+            printBoard(board);
+            System.out.println("\nPlayer " + mark + ", it's your turn.");
+            
+            if (firstPromt) {
+                getPromptForOuterPick();
+                firstPromt = false;
+            }
+            int choice1 = readIntInRange(scanner, 1, 9, "");
+            
+            getPromptForInnerPick(mark);
+            int choice2 = readIntInRange(scanner, 1, 9, "");
+
+            int outerIndex = choice1 - 1;
+            if (boardOwner[outerIndex] != '-') {
+                System.out.println("That internal board has already been completed. Please choose another board.");
+                continue;
+            }
+
+            if (!isCellEmpty(board, choice1, choice2)) {
+                System.out.println("That cell is already occupied. Please choose another.");
+                continue;
+            }
+
+            placeMark(board, choice1, choice2, mark);
+
+            if (checkInnerWin(board, outerIndex, mark)) {
+                boardOwner[outerIndex] = mark;
+                blockBoard(board, outerIndex, mark);
+                printBoard(board);
+                System.out.println("\nPlayer " + mark + " wins internal board " + choice1 + "!");
+
+                if (checkExternalWin(boardOwner, mark)) {
+                    System.out.println("Player " + mark + " wins the external game!");
+                    gameOver = true;
+                    return mark;
+                } else if (areAllBoardsBlocked(boardOwner)) {
+                    System.out.println("All internal boards are blocked. The game ends in a draw.");
+                    gameOver = true;
+                    return 'D';
+                } else {
+                    mark = nextMark(mark);
+                }
+            } else if (isInnerBoardFull(board, outerIndex)) {
+                boardOwner[outerIndex] = 'D';
+                printBoard(board);
+                System.out.println("\nInternal board " + choice1 + " is full and now blocked.");
+                if (areAllBoardsBlocked(boardOwner)) {
+                    System.out.println("All internal boards are blocked. The game ends in a draw.");
+                    gameOver = true;
+                    return 'D';
+                } else {
+                    mark = nextMark(mark);
+                }
+            } else {
+                mark = nextMark(mark);
+            }
+        }
+
+        return 'D';
+    }
+
+    private boolean isCellEmpty(char[][][] board, int outerChoice, int innerChoice) {
+        int outerIndex = outerChoice - 1;
+        int innerIndex = innerChoice - 1;
+        int row = innerIndex / 3;
+        int col = innerIndex % 3;
+        return board[outerIndex][row][col] == '-';
+    }
+
+    private char nextMark(char mark) {
+        return mark == 'X' ? 'O' : 'X';
+    }
+
+    private boolean checkInnerWin(char[][][] board, int outerIndex, char mark) {
+        for (int r = 0; r < 3; r++) {
+            if (board[outerIndex][r][0] == mark && board[outerIndex][r][1] == mark && board[outerIndex][r][2] == mark) {
+                return true;
+            }
+        }
+        for (int c = 0; c < 3; c++) {
+            if (board[outerIndex][0][c] == mark && board[outerIndex][1][c] == mark && board[outerIndex][2][c] == mark) {
+                return true;
+            }
+        }
+        if (board[outerIndex][0][0] == mark && board[outerIndex][1][1] == mark && board[outerIndex][2][2] == mark) {
+            return true;
+        }
+        if (board[outerIndex][0][2] == mark && board[outerIndex][1][1] == mark && board[outerIndex][2][0] == mark) {
+            return true;
+        }
+        return false;
+    }
+
+    private boolean isInnerBoardFull(char[][][] board, int outerIndex) {
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                if (board[outerIndex][row][col] == '-') {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+
+    private boolean areAllBoardsBlocked(char[] boardOwner) {
+        for (char owner : boardOwner) {
+            if (owner == '-') {
+                return false;
+            }
+        }
+        return true;
+    }
+
+    private boolean checkExternalWin(char[] boardOwner, char mark) {
+        int[][] lines = {
+            {0, 1, 2}, {3, 4, 5}, {6, 7, 8},
+            {0, 3, 6}, {1, 4, 7}, {2, 5, 8},
+            {0, 4, 8}, {2, 4, 6}
+        };
+        for (int[] line : lines) {
+            if (boardOwner[line[0]] == mark && boardOwner[line[1]] == mark && boardOwner[line[2]] == mark) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    private void blockBoard(char[][][] board, int outerIndex, char mark) {
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < 3; col++) {
+                board[outerIndex][row][col] = ' ';
+            }
+        }
+        board[outerIndex][1][1] = mark;
+    }
+
+    private void placeMark(char[][][] board, int outerChoice, int innerChoice, char mark) {
+        int outerIndex = outerChoice - 1;
+        int innerIndex = innerChoice - 1;
+        int row = innerIndex / 3;
+        int col = innerIndex % 3;
+        board[outerIndex][row][col] = mark;
+    }
+
+    private void printBoard(char[][][] board) {
+        for (int bigRow = 0; bigRow < 3; bigRow++) {
+            for (int smallRow = 0; smallRow < 3; smallRow++) {
+                for (int bigCol = 0; bigCol < 3; bigCol++) {
+                    if (bigCol > 0) System.out.print(" | ");
+                    int subgrid = bigRow * 3 + bigCol;
+                    for (int col = 0; col < 3; col++) {
+                        System.out.print(board[subgrid][smallRow][col] + " ");
+                    }
+                }
+                System.out.println();
+            }
+            if (bigRow < 2) {
+                System.out.println("------------------------");
+            }
+        }
+    }
+
+    public void getPromptForOuterPick() {
+        System.out.println("\nPick a internal grid (1-9) to select your internal game: ");
+    }
+
+    public void getPromptForInnerPick(char mark) {
+        System.out.println("\nSelect a position (1-9) on the internal grid to place your mark " + mark + ": ");
+    }
+
+    public void getReminderForMarkPlacement() {
+        System.out.println("\nRemember that tthe boards are set up as follows:");
+        System.out.println("    1 | 2 | 3");
+        System.out.println("    4 | 5 | 6");
+        System.out.println("    7 | 8 | 9");
+    }
+
+    public static int readIntInRange(Scanner scanner, int min, int max, String prompt) {
+        while (scanner.hasNextLine()) {
+            System.out.print(prompt);
+            String input = scanner.nextLine().trim();
+
+            if (input.isEmpty()) continue;
+
+            try {
+                int value = Integer.parseInt(input);
+                if (value >= min && value <= max) {
+                    return value;
+                }
+                System.out.println("Invalid input. Please enter a number between " + min + " and " + max + ".");
+            } catch (NumberFormatException e) {
+                System.out.println("Invalid input. Numbers Only.");
+            }
+        }
+        return -1;
+    }
+}
