@@ -1,12 +1,13 @@
 import java.util.Scanner;
 
-public class Beginner {
+public class Advanced {
     
     
-    public char newBeginnerGame() {
+    public char newAdvancedGame() {
         Scanner scanner = new Scanner(System.in);
         char mark = 'X';
         boolean gameOver = false;
+        boolean firstPromt = true;
 
         char[][][] board = new char[9][3][3];
         char[] boardOwner = new char[9];
@@ -27,8 +28,13 @@ public class Beginner {
             System.out.println("\nUltimate Tic-Tac-Toe Board:");
             printBoard(board);
             System.out.println("\nPlayer " + mark + ", it's your turn.");
+            while (firstPromt) {
             getPromptForOuterPick();
             int choice1 = readIntInRange(scanner, 1, 9, "");
+            firstPromt = false;
+            }
+             getPromptForOuterPick();
+            }
             getPromptForInnerPick(mark);
             int choice2 = readIntInRange(scanner, 1, 9, "");
 

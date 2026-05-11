@@ -3,26 +3,33 @@ import java.util.Scanner;
 public class Menu {
 
     Beginner beginner = new Beginner();
+    Advanced advanced = new Advanced();
 
-    private int beginnerWins;
+    private int playerXBeginnerWins;
+    private int playerOBeginnerWins;
     private int beginnerGames;
     private int beginnerTies;
-    private int advancedWins;
+    private int playerXAdvancedWins;
+    private int playerOAdvancedWins;
     private int advancedGames;
     private int advancedTies;
     private int totalGames;
-    private int totalWins;
+    private int playerXTotalWins;
+    private int playerOTotalWins;
     private int totalTies;
     
     public Menu() {
-        this.beginnerWins = 0;
+        this.playerXBeginnerWins = 0;
+        this.playerOBeginnerWins = 0;
         this.beginnerGames = 0;
         this.beginnerTies = 0;
-        this.advancedWins = 0;
+        this.playerXAdvancedWins = 0;
+        this.playerOAdvancedWins = 0;
         this.advancedGames = 0;
         this.advancedTies = 0;
         this.totalGames = 0;
-        this.totalWins = 0;
+        this.playerXTotalWins = 0;
+        this.playerOTotalWins = 0;
         this.totalTies = 0;
     }
 
@@ -61,6 +68,7 @@ public class Menu {
                 break;
             case 3:
                 System.out.println("\nStarting a new advanced game...");
+                advanced.newAdvancedGame();
                 totalGames++;
                 advancedGames++;
                 break;
@@ -96,15 +104,21 @@ public class Menu {
 
     public void displayScoreboard() {
         System.out.println("\n===Scoreboard===");
-        System.out.println("Beginner Games Played: " + beginnerGames);
-        System.out.println("Beginner Wins: " + beginnerWins);
+        System.out.println("\nPlayer X Stats:");
+        System.out.println("\nBeginner Wins: " + playerXBeginnerWins);
+        System.out.println("Advanced Wins: " + playerXAdvancedWins);
+        System.out.println("Total Wins: " + playerXTotalWins);
+        System.out.println("\nPlayer O Stats:");
+        System.out.println("\nBeginner Wins: " + playerOBeginnerWins);
+        System.out.println("Advanced Wins: " + playerOAdvancedWins);
+        System.out.println("Total Wins: " + playerOTotalWins);
+        System.out.println("\nGeneral Stats:");
+        System.out.println("\nBeginner Games: " + beginnerGames);
         System.out.println("Beginner Ties: " + beginnerTies);
-        System.out.println("Advanced Games Played: " + advancedGames);
-        System.out.println("Advanced Wins: " + advancedWins);
+        System.out.println("Advanced Games: " + advancedGames);
         System.out.println("Advanced Ties: " + advancedTies);
         System.out.println("Total Games: " + totalGames);
-        System.out.println("Total Wins: " + totalWins);
-        System.out.println("Ties: " + totalTies);
+        System.out.println("Total Ties: " + totalTies);
     }
 
 
