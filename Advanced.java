@@ -7,7 +7,6 @@ public class Advanced {
         Scanner scanner = new Scanner(System.in);
         char mark = 'X';
         boolean gameOver = false;
-        boolean firstPromt = true;
 
         char[][][] board = new char[9][3][3];
         char[] boardOwner = new char[9];
@@ -23,18 +22,18 @@ public class Advanced {
         }
 
         System.out.println("\nStarting a new Advanced game...");
-
-        while (!gameOver) {
-            System.out.println("\nUltimate Tic-Tac-Toe Board:");
-            printBoard(board);
-            System.out.println("\nPlayer " + mark + ", it's your turn.");
-            
-            if (firstPromt) {
-                getPromptForOuterPick();
-                firstPromt = false;
+        System.out.println("Make sure you have read the instructions before starting. \nAnd if at any point you would like to exit the game press 0 and you will be taken back to the main menu, \nbut it will count as a tie for both players.");
+        System.out.println("\nUltimate Tic-Tac-Toe Board:");
+        printBoard(board);
+        System.out.println("\nPlayer " + mark + ", it's your turn.");
+        getPromptForOuterPick();
+        int choice1 = readIntInRange(scanner, 0, 9, "");
+        while(!gameOver) {
+          
+            if (choice1 == 0) {
+                System.out.println("Exiting to main menu. This game will count as a tie for both players.");
+                return 'D';
             }
-            int choice1 = readIntInRange(scanner, 1, 9, "");
-            
             getPromptForInnerPick(mark);
             int choice2 = readIntInRange(scanner, 1, 9, "");
 
@@ -65,7 +64,8 @@ public class Advanced {
                     System.out.println("All internal boards are blocked. The game ends in a draw.");
                     gameOver = true;
                     return 'D';
-                } else {
+                }
+            else {
                     mark = nextMark(mark);
                 }
             } else if (isInnerBoardFull(board, outerIndex)) {
@@ -82,10 +82,16 @@ public class Advanced {
             } else {
                 mark = nextMark(mark);
             }
+            System.out.println("\nUltimate Tic-Tac-Toe Board:");
+            printBoard(board);
+            choice1 = choice2;
+            System.out.println("\nPlayer " + mark + ", it's your turn.");
         }
-
         return 'D';
     }
+
+
+
 
     private boolean isCellEmpty(char[][][] board, int outerChoice, int innerChoice) {
         int outerIndex = outerChoice - 1;
@@ -196,13 +202,6 @@ public class Advanced {
         System.out.println("\nSelect a position (1-9) on the internal grid to place your mark " + mark + ": ");
     }
 
-    public void getReminderForMarkPlacement() {
-        System.out.println("\nRemember that tthe boards are set up as follows:");
-        System.out.println("    1 | 2 | 3");
-        System.out.println("    4 | 5 | 6");
-        System.out.println("    7 | 8 | 9");
-    }
-
     public static int readIntInRange(Scanner scanner, int min, int max, String prompt) {
         while (scanner.hasNextLine()) {
             System.out.print(prompt);
@@ -216,8 +215,16 @@ public class Advanced {
                     return value;
                 }
                 System.out.println("Invalid input. Please enter a number between " + min + " and " + max + ".");
+                System.out.println("\nRemember that the boards are set up as follows:");
+                System.out.println("    1 | 2 | 3");
+                System.out.println("    4 | 5 | 6");
+                System.out.println("    7 | 8 | 9");
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Numbers Only.");
+                System.out.println("\nRemember that the boards are set up as follows:");
+                System.out.println("    1 | 2 | 3");
+                System.out.println("    4 | 5 | 6");
+                System.out.println("    7 | 8 | 9");
             }
         }
         return -1;

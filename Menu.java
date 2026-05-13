@@ -2,9 +2,11 @@ import java.util.Scanner;
 
 public class Menu {
 
+    //declares a beginner game object and a advanced game object
     Beginner beginner = new Beginner();
     Advanced advanced = new Advanced();
 
+    //all of our variables to keep track of the information in the game
     private int playerXBeginnerWins;
     private int playerOBeginnerWins;
     private int beginnerGames;
@@ -18,6 +20,7 @@ public class Menu {
     private int playerOTotalWins;
     private int totalTies;
     
+    //sets all the variables to zero
     public Menu() {
         this.playerXBeginnerWins = 0;
         this.playerOBeginnerWins = 0;
@@ -33,10 +36,12 @@ public class Menu {
         this.totalTies = 0;
     }
 
+    //the main function that contains the menu
     public void MainMenu() {
             boolean mainMenuLoop = true;
             while (mainMenuLoop) {
 
+        //declares a scanner object and prints out the first menu
         Scanner scanner = new Scanner(System.in);
         System.out.println("\nUltimate Tic-Tac-Toe!");
         System.out.println("1. New Beginner Game");
@@ -47,13 +52,17 @@ public class Menu {
         System.out.println("6. Quit");
         int choice = readIntInRange(scanner, 1, 6, "\nPlease select an option (1-6): ");
         
+        //the switch/case for the first menu using the scanner
         switch (choice) {
             case 1:
-                beginner.newBeginnerGame();
+                //beginner game play
+                char beginnerResult = beginner.newBeginnerGame();
                 totalGames++;
                 beginnerGames++;
+                updateScoreboard(beginnerResult, true);
                 break; 
             case 2:
+                //beginner instructions
                 System.out.println("\n===Beginner Game Instructions===");
                 System.out.println("1. The game is played on a 3x3 external grid with 3x3 internal grids inside of each spot on the external grid.");
                 System.out.println("2. Players take turns placing their marks (X or O) on a internal grid of choice within the external grid.");
@@ -67,11 +76,14 @@ public class Menu {
                 pressEnterToContinue(scanner);
                 break;
             case 3:
-                advanced.newAdvancedGame();
+                //advanced game play
+                char advancedResult = advanced.newAdvancedGame();
                 totalGames++;
                 advancedGames++;
+                updateScoreboard(advancedResult, false);
                 break;
             case 4:
+                //advanced instructions
                 System.out.println("\n===Advanced Game Instructions===");
                 System.out.println("1. The game is played on a 3x3 external grid with 3x3 internal grids inside of each spot on the external grid.");
                 System.out.println("2. Players take turns placing their marks (X or O) on a internal grid of choice within the external grid.");
@@ -87,6 +99,7 @@ public class Menu {
                 pressEnterToContinue(scanner);
                 break;
             case 5:
+                //scoreboard
                 displayScoreboard();
                 pressEnterToContinue(scanner);
                 break;
@@ -100,7 +113,7 @@ public class Menu {
         
     
 }
-
+    //display for all of the stats in the games
     public void displayScoreboard() {
         System.out.println("\n===Scoreboard===");
         System.out.println("\nPlayer X Stats:");
@@ -120,6 +133,30 @@ public class Menu {
         System.out.println("Total Ties: " + totalTies);
     }
 
+    private void updateScoreboard(char result, boolean isBeginnerGame) {
+        if (result == 'X') {
+            playerXTotalWins++;
+            if (isBeginnerGame) {
+                playerXBeginnerWins++;
+            } else {
+                playerXAdvancedWins++;
+            }
+        } else if (result == 'O') {
+            playerOTotalWins++;
+            if (isBeginnerGame) {
+                playerOBeginnerWins++;
+            } else {
+                playerOAdvancedWins++;
+            }
+        } else if (result == 'D') {
+            totalTies++;
+            if (isBeginnerGame) {
+                beginnerTies++;
+            } else {
+                advancedTies++;
+            }
+        }
+    }
 
 
  public static int readIntInRange(Scanner scanner, int min, int max, String prompt) {

@@ -22,13 +22,17 @@ public class Beginner {
         }
 
         System.out.println("\nStarting a new Beginner game...");
-
+        System.out.println("Make sure you have read the instructions before starting. \nAnd if at any point you would like to exit the game press 0 and you will be taken back to the main menu, \nbut it will count as a tie for both players.");
         while (!gameOver) {
             System.out.println("\nUltimate Tic-Tac-Toe Board:");
             printBoard(board);
             System.out.println("\nPlayer " + mark + ", it's your turn.");
             getPromptForOuterPick();
-            int choice1 = readIntInRange(scanner, 1, 9, "");
+            int choice1 = readIntInRange(scanner, 0, 9, "");
+            if (choice1 == 0) {
+                System.out.println("Exiting to main menu. This game will count as a tie for both players.");
+                return 'D';
+            }
             getPromptForInnerPick(mark);
             int choice2 = readIntInRange(scanner, 1, 9, "");
 
@@ -190,13 +194,6 @@ public class Beginner {
         System.out.println("\nSelect a position (1-9) on the internal grid to place your mark " + mark + ": ");
     }
 
-    public void getReminderForMarkPlacement() {
-        System.out.println("\nRemember that tthe boards are set up as follows:");
-        System.out.println("    1 | 2 | 3");
-        System.out.println("    4 | 5 | 6");
-        System.out.println("    7 | 8 | 9");
-    }
-
     public static int readIntInRange(Scanner scanner, int min, int max, String prompt) {
         while (scanner.hasNextLine()) {
             System.out.print(prompt);
@@ -210,8 +207,16 @@ public class Beginner {
                     return value;
                 }
                 System.out.println("Invalid input. Please enter a number between " + min + " and " + max + ".");
+                System.out.println("\nRemember that the boards are set up as follows:");
+                System.out.println("    1 | 2 | 3");
+                System.out.println("    4 | 5 | 6");
+                System.out.println("    7 | 8 | 9");
             } catch (NumberFormatException e) {
                 System.out.println("Invalid input. Numbers Only.");
+                System.out.println("\nRemember that the boards are set up as follows:");
+                System.out.println("    1 | 2 | 3");
+                System.out.println("    4 | 5 | 6");
+                System.out.println("    7 | 8 | 9");
             }
         }
         return -1;
