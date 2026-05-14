@@ -1,6 +1,9 @@
 import java.util.Scanner;
 
 public class Advanced {
+    public static final String ANSI_RED = "\u001B[31m";
+    public static final String ANSI_GREEN = "\u001B[32m";
+    public static final String ANSI_RESET = "\u001B[0m";
     
     
     public char newAdvancedGame() {
@@ -38,10 +41,6 @@ public class Advanced {
             int choice2 = readIntInRange(scanner, 1, 9, "");
 
             int outerIndex = choice1 - 1;
-            if (boardOwner[outerIndex] != '-') {
-                System.out.println("That internal board has already been completed. Please choose another board.");
-                continue;
-            }
 
             if (!isCellEmpty(board, choice1, choice2)) {
                 System.out.println("That cell is already occupied. Please choose another.");
@@ -159,14 +158,15 @@ public class Advanced {
         return false;
     }
 
-    private void blockBoard(char[][][] board, int outerIndex, char mark) {
+    
+    public void blockBoard(char[][][] board, int outerIndex, char mark) {
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
-                board[outerIndex][row][col] = ' ';
+                board[outerIndex][row][col] = mark;
             }
         }
-        board[outerIndex][1][1] = mark;
     }
+        
 
     private void placeMark(char[][][] board, int outerChoice, int innerChoice, char mark) {
         int outerIndex = outerChoice - 1;
@@ -183,7 +183,7 @@ public class Advanced {
                     if (bigCol > 0) System.out.print(" | ");
                     int subgrid = bigRow * 3 + bigCol;
                     for (int col = 0; col < 3; col++) {
-                        System.out.print(board[subgrid][smallRow][col] + " ");
+                        System.out.print(colorizeCell(board[subgrid][smallRow][col]) + " ");
                     }
                 }
                 System.out.println();
@@ -192,6 +192,15 @@ public class Advanced {
                 System.out.println("------------------------");
             }
         }
+    }
+
+    private String colorizeCell(char cell) {
+        if (cell == 'X') {
+            return ANSI_RED + cell + ANSI_RESET;
+        } else if (cell == 'O') {
+            return ANSI_GREEN + cell + ANSI_RESET;
+        }
+        return String.valueOf(cell);
     }
 
     public void getPromptForOuterPick() {
