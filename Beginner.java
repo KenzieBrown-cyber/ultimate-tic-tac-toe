@@ -4,6 +4,7 @@ public class Beginner {
     
     
     public char newBeginnerGame() {
+        //declares the scanner, mark, gameOver boolean, and the 3d and 1d arrays
         Scanner scanner = new Scanner(System.in);
         char mark = 'X';
         boolean gameOver = false;
@@ -20,22 +21,28 @@ public class Beginner {
                 }
             }
         }
-
+        //in game instructions and user input
         System.out.println("\nStarting a new Beginner game...");
-        System.out.println("Make sure you have read the instructions before starting. \nAnd if at any point you would like to exit the game press 0 and you will be taken back to the main menu, \nbut it will count as a tie for both players.");
+        System.out.println("\nMake sure you have read the instructions before starting. \nAnd if at any point you would like to exit the game press 0 and you will be taken back to the main menu, \nbut it will count as a tie for both players.");
         while (!gameOver) {
-            System.out.println("\nUltimate Tic-Tac-Toe Board:");
+            System.out.println("\n\nUltimate Tic-Tac-Toe Board:");
             printBoard(board);
             System.out.println("\nPlayer " + mark + ", it's your turn.");
             getPromptForOuterPick();
             int choice1 = readIntInRange(scanner, 0, 9, "");
+            
+            getPromptForInnerPick(mark);
+            int choice2 = readIntInRange(scanner, 0, 9, "");
+
             if (choice1 == 0) {
                 System.out.println("Exiting to main menu. This game will count as a tie for both players.");
                 return 'D';
+            } else if (choice2 == 0) {
+                System.out.println("Exiting to main menu. This game will count as a tie for both players.");
+                return 'D';
             }
-            getPromptForInnerPick(mark);
-            int choice2 = readIntInRange(scanner, 1, 9, "");
-
+            
+            //checks if space or board is full and cannot be played in
             int outerIndex = choice1 - 1;
             if (boardOwner[outerIndex] != '-') {
                 System.out.println("That internal board has already been completed. Please choose another board.");
@@ -48,17 +55,18 @@ public class Beginner {
             }
 
             placeMark(board, choice1, choice2, mark);
-
+            //checks if the player has won an internal game
             if (checkInnerWin(board, outerIndex, mark)) {
                 boardOwner[outerIndex] = mark;
                 blockBoard(board, outerIndex, mark);
                 printBoard(board);
                 System.out.println("\nPlayer " + mark + " wins internal board " + choice1 + "!");
-
+                //checks if the player has won the whole game
                 if (checkExternalWin(boardOwner, mark)) {
                     System.out.println("Player " + mark + " wins the external game!");
                     gameOver = true;
                     return mark;
+                    //checks if the game ends in a draw
                 } else if (areAllBoardsBlocked(boardOwner)) {
                     System.out.println("All internal boards are blocked. The game ends in a draw.");
                     gameOver = true;
@@ -84,7 +92,7 @@ public class Beginner {
 
         return 'D';
     }
-
+    //checks if a given spot on the internal board is already occupied
     private boolean isCellEmpty(char[][][] board, int outerChoice, int innerChoice) {
         int outerIndex = outerChoice - 1;
         int innerIndex = innerChoice - 1;
@@ -92,11 +100,11 @@ public class Beginner {
         int col = innerIndex % 3;
         return board[outerIndex][row][col] == '-';
     }
-
+ //switches between x and o for each turn
     private char nextMark(char mark) {
         return mark == 'X' ? 'O' : 'X';
     }
-
+  //used to determine the wins of the inside boards specifically 
     private boolean checkInnerWin(char[][][] board, int outerIndex, char mark) {
         for (int r = 0; r < 3; r++) {
             if (board[outerIndex][r][0] == mark && board[outerIndex][r][1] == mark && board[outerIndex][r][2] == mark) {
@@ -117,6 +125,7 @@ public class Beginner {
         return false;
     }
 
+    //checks if there are any open places in an inner board
     private boolean isInnerBoardFull(char[][][] board, int outerIndex) {
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
@@ -127,7 +136,7 @@ public class Beginner {
         }
         return true;
     }
-
+    //checks if there are any open spaces anywhere on the board
     private boolean areAllBoardsBlocked(char[] boardOwner) {
         for (char owner : boardOwner) {
             if (owner == '-') {
@@ -136,7 +145,7 @@ public class Beginner {
         }
         return true;
     }
-
+   //returns false if no one has won the full game
     private boolean checkExternalWin(char[] boardOwner, char mark) {
         int[][] lines = {
             {0, 1, 2}, {3, 4, 5}, {6, 7, 8},
@@ -150,7 +159,7 @@ public class Beginner {
         }
         return false;
     }
-
+    //blocks off won internal boards
     private void blockBoard(char[][][] board, int outerIndex, char mark) {
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < 3; col++) {
@@ -159,7 +168,7 @@ public class Beginner {
         }
         board[outerIndex][1][1] = mark;
     }
-
+    //stores the user's chosen mark spot in the array
     private void placeMark(char[][][] board, int outerChoice, int innerChoice, char mark) {
         int outerIndex = outerChoice - 1;
         int innerIndex = innerChoice - 1;
@@ -167,7 +176,7 @@ public class Beginner {
         int col = innerIndex % 3;
         board[outerIndex][row][col] = mark;
     }
-
+   //prints the whole board in the terminal
     private void printBoard(char[][][] board) {
         for (int bigRow = 0; bigRow < 3; bigRow++) {
             for (int smallRow = 0; smallRow < 3; smallRow++) {
@@ -185,15 +194,16 @@ public class Beginner {
             }
         }
     }
-
+  //prompts the user to choose and internal grid  
     public void getPromptForOuterPick() {
         System.out.println("\nPick a internal grid (1-9) to select your internal game: ");
     }
-
+    //promts the user to choose a space on the internal board  
     public void getPromptForInnerPick(char mark) {
         System.out.println("\nSelect a position (1-9) on the internal grid to place your mark " + mark + ": ");
     }
-
+    //checks that the user input is usable
+    //if not, it reminds the user what to do
     public static int readIntInRange(Scanner scanner, int min, int max, String prompt) {
         while (scanner.hasNextLine()) {
             System.out.print(prompt);

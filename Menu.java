@@ -104,6 +104,7 @@ public class Menu {
                 pressEnterToContinue(scanner);
                 break;
             case 6:
+                //Exits the game and prints a goodbye message
                 System.out.println("\nThanks for playing. Goodbye!");
                 mainMenuLoop = false;
                 break;
@@ -133,6 +134,7 @@ public class Menu {
         System.out.println("Total Ties: " + totalTies);
     }
 
+    //updates the scoreboard after every game
     private void updateScoreboard(char result, boolean isBeginnerGame) {
         if (result == 'X') {
             playerXTotalWins++;
@@ -158,7 +160,7 @@ public class Menu {
         }
     }
 
-
+//Checks to make sure that user input is valid
  public static int readIntInRange(Scanner scanner, int min, int max, String prompt) {
     while (scanner.hasNextLine()) { 
         System.out.print(prompt);
@@ -179,6 +181,7 @@ public class Menu {
     return -1; 
 }
 
+//determines when the user wants to continue
 public void pressEnterToContinue(Scanner scanner) {
    
         System.out.println("\nPress Enter to continue...");
